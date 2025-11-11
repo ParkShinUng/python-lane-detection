@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import lane_detection_basic_common_func as basic_common_func
 
 # 흑백이미지 변환
 def grayscale(img):     
@@ -33,6 +34,8 @@ def get_canny_image(image, low_threshold=70, high_threshold=210, kernel_size=3):
     canny_img = canny(blur_img, low_threshold, high_threshold)
     return canny_img
 
-def get_hough_image(roi_img, rho=1, theta=np.pi/180, threshold=30, min_line_len=10, max_line_gap=20):
+def get_hough_image(image, rho=1, theta=np.pi/180, threshold=30, min_line_len=10, max_line_gap=20):
+    canny_img = get_canny_image(image)
+    roi_img = basic_common_func.get_roi_image(canny_img)
     hough_img = hough_lines(roi_img, rho, theta, threshold, min_line_len, max_line_gap)
     return hough_img

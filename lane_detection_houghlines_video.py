@@ -14,9 +14,7 @@ while(cap.isOpened()):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
-    canny_img = edge_common_func.get_canny_image(image)
-    roi_img = basic_common_func.get_roi_image(canny_img)
-    hough_img = edge_common_func.hough_lines(roi_img, 1, 1 * np.pi/180, 30, 10, 20)
+    hough_img = edge_common_func.get_hough_image(image)
 
     result = edge_common_func.weighted_img(hough_img, image)
     
