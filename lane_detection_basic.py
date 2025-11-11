@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import lane_detection_basic_common_func
+import lane_detection_basic_common_func as basic_common_func
 
 image = lane_detection_basic_common_func.get_image('solidWhiteCurve.jpg')
 
