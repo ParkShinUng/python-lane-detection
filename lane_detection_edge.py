@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import common_func
 
 # 흑백이미지 변환
 def grayscale(img):     
@@ -13,7 +14,7 @@ def canny(img, low_threshold, high_threshold):
 def gaussian_blur(img, kernel_size):
     return cv2.GaussianBlur(img, (kernel_size, kernel_size), 0)
 
-image = cv2.imread('./resources/img/solidWhiteCurve.jpg')
+image = common_func.get_image('solidWhiteCurve.jpg')
 height, width = image.shape[:2]
 
 gray_img = grayscale(image)
