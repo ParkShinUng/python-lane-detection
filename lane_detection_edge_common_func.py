@@ -19,6 +19,9 @@ def draw_lines(img, lines, color=[0, 0, 255], thickness=2):
         for x1,y1,x2,y2 in line:
             cv2.line(img, (x1, y1), (x2, y2), color, thickness)
 
+def draw_fit_line(img, lines, color=[255, 0, 0], thickness=10):
+    cv2.line(img, (lines[0], lines[1]), (lines[2], lines[3]), color, thickness)
+
 def weighted_img(image, initial_image, alpha=1, beta=1., gamma=0.):
     return cv2.addWeighted(initial_image, alpha, image, beta, gamma)
 
@@ -37,5 +40,18 @@ def get_hough_image(image, rho=1, theta=np.pi/180, threshold=30, min_line_len=10
 def get_hough_lines(image, rho=1, theta=np.pi/180, threshold=30, min_line_len=10, max_line_gap=20):
     canny_img = get_canny_image(image)
     roi_img = basic_common_func.get_roi_image(canny_img)
-    lines = cv2.HoughLinesP(roi_img, rho, theta, threshold, np.array([]), minLineLength=min_line_len, maxLineGap=max_line_gap)
+    lines = cv2.HoughLinesP(roi_img, rho, theta, threshold, np.array([]),
+     minLineLength=min_line_len, maxLineGap=max_line_gap)
     return lines
+
+def get_fitline(img, f_lines):
+    lines = np.squeeze(f_lines)
+    lines = lines.reshape(lines.shape[0] * 2, 2)
+    rows, cols = img.shape[:2]
+    output = cv2.fitLine(lines, cv2.DIST_L2, 0, 0.01, 0.01)
+    vx, vy, x, y = output[0], output[1], output[2], output[3]
+    x1 = int(((img.shape[0] - 1) - y) / vy * vx + x)
+    y1 = img.shape[0] - 1
+    x2 = int(((img.shape[0] / 2 + 100) - y) / vy * vx + x)
+    y2 = int(img.shape[0] / 2 + 100)
+    return [x1, y1, x2, y2]

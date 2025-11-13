@@ -24,11 +24,14 @@ slope_degree = slope_degree[vertical_mask]
 # 필터링된 직선 제거
 L_lines, R_lines = line_arr[(slope_degree > 0), :], line_arr[(slope_degree < 0), :]
 L_lines, R_lines = L_lines[:, None], R_lines[:, None]
-filtered_image_arr = np.zeros((image.shape[0], image.shape[1], 3), dtype=np.uint8)
 
-# 직선 Draw
-edge_common_func.draw_lines(filtered_image_arr, L_lines)
-edge_common_func.draw_lines(filtered_image_arr, R_lines)
+# 대표선 Draw
+left_fit_line = edge_common_func.get_fitline(image, L_lines)
+right_fit_line = edge_common_func.get_fitline(image, R_lines)
+
+filtered_image_arr = np.zeros((image.shape[0], image.shape[1], 3), dtype=np.uint8)
+edge_common_func.draw_fit_line(filtered_image_arr, left_fit_line)
+edge_common_func.draw_fit_line(filtered_image_arr, right_fit_line)
 
 result = edge_common_func.weighted_img(filtered_image_arr, image) # 원본 이미지에 검출된 선 overlap
 
